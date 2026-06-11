@@ -1,0 +1,11 @@
+{
+    "display_name": "QR Manager",
+    "loading_order": 220,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "minseo",
+    "version": "1.0.0",
+    "homePage": ""
+}

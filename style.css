@@ -1,0 +1,417 @@
+:root {
+    --qrm-accent: #7C8CF8;
+    --qrm-accent-soft: rgba(124, 140, 248, 0.18);
+}
+
+/* ============================================
+   원본 QR 바 숨기기 옵션
+   ============================================ */
+body.qrm-hide-bar #qr--bar {
+    display: none !important;
+}
+
+/* ============================================
+   토글 버튼 (입력창 왼쪽 버튼 줄, 지팡이 버튼 옆)
+   ============================================ */
+#qrm-toggle-btn {
+    order: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+#qrm-toggle-btn:hover {
+    color: var(--qrm-accent);
+}
+
+#leftSendForm {
+    display: flex;
+    flex-direction: row;
+}
+
+/* ============================================
+   팝업 본체 (데스크탑: 드래그 + 리사이즈)
+   ============================================ */
+#qrm-popup {
+    position: fixed;
+    min-width: 260px;
+    min-height: 200px;
+    max-height: 85vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    resize: both;
+    z-index: 4000;
+    border-radius: 14px;
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.12));
+    background-color: var(--SmartThemeBlurTintColor, rgba(25, 25, 30, 0.95));
+    backdrop-filter: blur(12px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2);
+    color: var(--SmartThemeBodyColor, #ddd);
+    user-select: none;
+}
+
+#qrm-popup.qrm-grabbing {
+    cursor: grabbing;
+    opacity: 0.92;
+}
+
+/* ============================================
+   헤더
+   ============================================ */
+#qrm-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    flex-shrink: 0;
+    cursor: grab;
+    touch-action: none;
+    background-image: linear-gradient(135deg, var(--qrm-accent) 0%, color-mix(in srgb, var(--qrm-accent) 70%, #000) 100%);
+    color: #fff;
+}
+
+.qrm-header-icon {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+#qrm-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#qrm-count {
+    font-size: 0.75rem;
+    opacity: 0.85;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    padding: 1px 8px;
+    white-space: nowrap;
+}
+
+.qrm-header-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+}
+
+.qrm-header-actions button {
+    width: 26px;
+    height: 26px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+    padding: 0;
+}
+
+.qrm-header-actions button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+#qrm-close-btn:hover {
+    transform: rotate(90deg);
+}
+
+/* ============================================
+   검색 툴바
+   ============================================ */
+#qrm-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.08));
+}
+
+#qrm-toolbar i {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+#qrm-search {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: inherit;
+    font-size: 0.9rem;
+    padding: 4px 0;
+}
+
+#qrm-search::placeholder {
+    color: inherit;
+    opacity: 0.45;
+}
+
+/* ============================================
+   콘텐츠
+   ============================================ */
+#qrm-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 10px 12px 14px;
+    box-sizing: border-box;
+}
+
+#qrm-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+#qrm-content::-webkit-scrollbar-thumb {
+    background-color: var(--qrm-accent-soft);
+    border-radius: 4px;
+}
+
+#qrm-content::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.qrm-placeholder {
+    text-align: center;
+    opacity: 0.6;
+    font-style: italic;
+    margin-top: 18px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+.qrm-placeholder-small {
+    margin: 6px 0;
+    font-size: 0.8rem;
+}
+
+/* ============================================
+   세트 그룹
+   ============================================ */
+.qrm-set-group {
+    margin-bottom: 10px;
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.08));
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.qrm-set-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 600;
+    background: var(--qrm-accent-soft);
+    transition: filter 0.15s;
+}
+
+.qrm-set-header:hover {
+    filter: brightness(1.15);
+}
+
+.qrm-set-caret {
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.qrm-set-caret.collapsed {
+    transform: rotate(-90deg);
+}
+
+.qrm-set-caret-fav {
+    font-size: 0.75rem;
+    color: #f5c842;
+    flex-shrink: 0;
+}
+
+.qrm-set-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+.qrm-set-count {
+    margin-left: auto;
+    font-size: 0.72rem;
+    font-weight: 400;
+    opacity: 0.7;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 1px 8px;
+    flex-shrink: 0;
+}
+
+.qrm-badge {
+    font-size: 0.65rem;
+    font-weight: 500;
+    border-radius: 4px;
+    padding: 1px 6px;
+    flex-shrink: 0;
+    line-height: 1.5;
+}
+
+.qrm-badge-global {
+    background: rgba(100, 181, 246, 0.2);
+    color: #90caf9;
+}
+
+.qrm-badge-chat {
+    background: rgba(129, 199, 132, 0.2);
+    color: #a5d6a7;
+}
+
+.qrm-badge-char {
+    background: rgba(255, 183, 77, 0.2);
+    color: #ffcc80;
+}
+
+.qrm-badge-hidden {
+    background: rgba(255, 255, 255, 0.08);
+    opacity: 0.7;
+}
+
+.qrm-set-body {
+    padding: 8px;
+}
+
+/* ============================================
+   QR 행
+   ============================================ */
+.qrm-qr-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 8px 10px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.07));
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.qrm-qr-row:last-child {
+    margin-bottom: 0;
+}
+
+.qrm-qr-row:hover {
+    background: var(--qrm-accent-soft);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.qrm-qr-row:active {
+    transform: translateY(0);
+}
+
+.qrm-qr-icon {
+    flex-shrink: 0;
+    color: var(--qrm-accent);
+    width: 16px;
+    text-align: center;
+}
+
+.qrm-qr-label {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.qrm-qr-origin {
+    flex-shrink: 0;
+    font-size: 0.68rem;
+    opacity: 0.55;
+    max-width: 90px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.qrm-qr-star {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    opacity: 0.4;
+    transition: opacity 0.15s, background 0.15s;
+}
+
+.qrm-qr-row:hover .qrm-qr-star {
+    opacity: 0.75;
+}
+
+.qrm-qr-star:hover {
+    opacity: 1 !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.qrm-qr-star.active {
+    opacity: 1;
+    color: #f5c842;
+}
+
+/* ============================================
+   모바일 레이아웃 (중앙 고정, 리사이즈 없음)
+   ============================================ */
+#qrm-popup.qrm-mobile {
+    position: fixed !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    top: 70px !important;
+    width: 95% !important;
+    max-width: 600px !important;
+    height: auto !important;
+    min-height: 160px !important;
+    max-height: 70vh !important;
+    resize: none !important;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    z-index: 4500 !important;
+}
+
+#qrm-popup.qrm-mobile #qrm-header {
+    cursor: default;
+}
+
+#qrm-popup.qrm-mobile #qrm-content {
+    max-height: 55vh;
+}
+
+#qrm-popup.qrm-mobile .qrm-qr-row {
+    min-height: 44px;
+    padding: 10px 12px;
+}
+
+#qrm-popup.qrm-mobile .qrm-qr-star {
+    width: 34px;
+    height: 34px;
+    opacity: 0.6;
+}
